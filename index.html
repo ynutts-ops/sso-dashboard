@@ -25,6 +25,8 @@
 <section class="filters card" aria-label="Filters">
   <label><span data-i18n="f_side">ฝ่าย / Side</span>
     <select id="f-side"><option value="">—</option></select></label>
+  <label><span data-i18n="f_team">ทีม / Team</span>
+    <select id="f-team"><option value="">—</option></select></label>
   <label><span data-i18n="f_region">ภาค / Region</span>
     <select id="f-region"><option value="">—</option></select></label>
   <label><span data-i18n="f_prov">จังหวัด / Province</span>
@@ -39,7 +41,12 @@
 <section class="kpis" id="kpis"></section>
 
 <section class="grid">
-  <div class="card span2"><div class="card-h"><h2 data-i18n="c_cand">คะแนนผู้สมัคร (Top 20)</h2><span class="hint" id="cand-hint"></span></div><div id="ch-cand" class="chart tall"></div></div>
+  <div class="card span2"><div class="card-h"><h2 data-i18n="c_map">แผนที่รายจังหวัด</h2>
+     <div class="seg" role="group"><button class="segb active" data-map="team" data-i18n="mm_team">ทีมที่นำ</button><button class="segb" data-map="turnout" data-i18n="mm_turnout">ร้อยละมาใช้สิทธิ</button></div>
+     <div class="seg" role="group"><button class="segb active" data-mside="I" data-i18n="I">ฝ่ายผู้ประกันตน</button><button class="segb" data-mside="E" data-i18n="E">ฝ่ายนายจ้าง</button></div></div>
+     <div id="ch-map" class="chart map"></div><div id="map-legend" class="legend"></div></div>
+  <div class="card"><div class="card-h"><h2 data-i18n="c_team">สัดส่วนคะแนนรายทีม</h2></div><div id="ch-team" class="chart map"></div></div>
+  <div class="card span2"><div class="card-h"><h2 data-i18n="c_cand">คะแนนผู้สมัคร (Top 20)</h2><span class="hint" id="cand-hint"></span></div><div id="cand-legend" class="legend"></div><div id="ch-cand" class="chart tall"></div></div>
   <div class="card"><div class="card-h"><h2 data-i18n="c_trend">แนวโน้มการนับคะแนน</h2></div><div id="ch-trend" class="chart"></div></div>
   <div class="card span2"><div class="card-h"><h2 data-i18n="c_prov">รายจังหวัด</h2>
      <select id="prov-metric" class="mini">
@@ -54,6 +61,7 @@
 <section class="card">
   <div class="tabs" role="tablist">
     <button class="tab active" data-tab="cand" data-i18n="t_cand">ผู้สมัคร</button>
+    <button class="tab" data-tab="team" data-i18n="t_team">ทีม</button>
     <button class="tab" data-tab="prov" data-i18n="t_prov">จังหวัด</button>
     <button class="tab" data-tab="dist" data-i18n="t_dist">อำเภอ/เขต</button>
     <button class="tab" data-tab="st" data-i18n="t_st">หน่วยเลือกตั้ง</button>
