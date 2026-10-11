@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SSO Board Election 2026 · Unofficial Count Dashboard</title>
+<meta name="description" content="Interactive dashboard of the unofficial vote count for the Thai Social Security Board election (SBE0304).">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%97%B3%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1 data-i18n="title">ผลการนับคะแนนเลือกตั้งคณะกรรมการประกันสังคม (อย่างไม่เป็นทางการ)</h1>
+    <p class="sub"><span data-i18n="subtitle">Social Security Board Election 2026 · Unofficial vote count</span> · <span data-i18n="asof">ข้อมูล ณ</span> <b id="asof">–</b></p>
+  </div>
+  <div class="actions">
+    <button id="lang" class="btn ghost" aria-label="Switch language">EN</button>
+  </div>
+</header>
+
+<section class="filters card" aria-label="Filters">
+  <label><span data-i18n="f_side">ฝ่าย / Side</span>
+    <select id="f-side"><option value="">—</option></select></label>
+  <label><span data-i18n="f_region">ภาค / Region</span>
+    <select id="f-region"><option value="">—</option></select></label>
+  <label><span data-i18n="f_prov">จังหวัด / Province</span>
+    <input id="f-prov" list="dl-prov" placeholder="พิมพ์เพื่อค้นหา / type to search" autocomplete="off"><datalist id="dl-prov"></datalist></label>
+  <label><span data-i18n="f_dist">อำเภอ/เขต / District</span>
+    <input id="f-dist" list="dl-dist" placeholder="เลือกจังหวัดก่อน / pick a province" autocomplete="off" disabled><datalist id="dl-dist"></datalist></label>
+  <label><span data-i18n="f_snap">เวลาข้อมูล / Snapshot</span>
+    <select id="f-snap"></select></label>
+  <button id="reset" class="btn" data-i18n="reset">ล้างตัวกรอง</button>
+</section>
+
+<section class="kpis" id="kpis"></section>
+
+<section class="grid">
+  <div class="card span2"><div class="card-h"><h2 data-i18n="c_cand">คะแนนผู้สมัคร (Top 20)</h2><span class="hint" id="cand-hint"></span></div><div id="ch-cand" class="chart tall"></div></div>
+  <div class="card"><div class="card-h"><h2 data-i18n="c_trend">แนวโน้มการนับคะแนน</h2></div><div id="ch-trend" class="chart"></div></div>
+  <div class="card span2"><div class="card-h"><h2 data-i18n="c_prov">รายจังหวัด</h2>
+     <select id="prov-metric" class="mini">
+       <option value="turnout" data-i18n="m_turnout">ร้อยละมาใช้สิทธิ</option>
+       <option value="progress" data-i18n="m_progress">ความคืบหน้าการนับ</option>
+       <option value="voters" data-i18n="m_voters">ผู้มาใช้สิทธิ</option>
+       <option value="votes" data-i18n="m_votes">คะแนนผู้สมัครที่เลือก</option>
+     </select></div><div id="ch-prov" class="chart tall"></div></div>
+  <div class="card"><div class="card-h"><h2 data-i18n="c_region">สัดส่วนผู้มาใช้สิทธิรายภาค</h2></div><div id="ch-region" class="chart"></div></div>
+</section>
+
+<section class="card">
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="cand" data-i18n="t_cand">ผู้สมัคร</button>
+    <button class="tab" data-tab="prov" data-i18n="t_prov">จังหวัด</button>
+    <button class="tab" data-tab="dist" data-i18n="t_dist">อำเภอ/เขต</button>
+    <button class="tab" data-tab="st" data-i18n="t_st">หน่วยเลือกตั้ง</button>
+    <div class="spacer"></div>
+    <input id="q" type="search" placeholder="ค้นหา… / Search…" aria-label="Search table">
+    <button id="csv" class="btn" data-i18n="csv">ดาวน์โหลด CSV</button>
+  </div>
+  <div class="table-wrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  <div class="pager"><span id="tbl-info"></span><div><button class="btn ghost" id="prev">‹</button><button class="btn ghost" id="next">›</button></div></div>
+</section>
+
+<footer>
+  <p data-i18n="foot">ข้อมูลอย่างไม่เป็นทางการจากสำนักงานประกันสังคม (SBE0304) · ใช้เพื่อการวิเคราะห์เท่านั้น ผลอย่างเป็นทางการให้ยึดตามประกาศของสำนักงานประกันสังคม</p>
+  <p>Source: <a href="https://sbe2.sso.go.th/inter/report/dashboard-sbe0304" target="_blank" rel="noopener">sbe2.sso.go.th · SBE0304</a> · <span id="gen"></span></p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
